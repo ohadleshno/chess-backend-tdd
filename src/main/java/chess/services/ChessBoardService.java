@@ -41,6 +41,10 @@ public class ChessBoardService {
                 return  new RokPiece(isWhiteTurn, cord, board);
             case KNIGHT:
                 return new KnightPiece(isWhiteTurn, cord, board);
+            case BISHOP:
+                return new BishopPiece(isWhiteTurn,cord,board);
+            case QUEEN:
+                return new QueenPiece(isWhiteTurn,cord,board);
             default:
                 throw new NoPieceException("No piece on cord");
         }

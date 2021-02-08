@@ -44,16 +44,4 @@ public class RokPiece extends Piece {
         }
     }
 
-    private boolean isBlocked(List<Cord> possibleMoves, Cord move) {
-        if (isCellEmpty(move)) {
-            return false;
-        }
-
-        if (doesCellHasEnemyPiece(move)) {
-            possibleMoves.add(move);
-        }
-
-        return true;
-    }
-
 }

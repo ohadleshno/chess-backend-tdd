@@ -36,4 +36,16 @@ public abstract class Piece {
     protected boolean doesCellHasFriendPiece(Cord cord) {
         return this.board.getCell(cord).getCellContent() == myCellContent;
     }
+
+    protected boolean isBlocked(List<Cord> possibleMoves, Cord move) {
+        if (isCellEmpty(move)) {
+            return false;
+        }
+
+        if (doesCellHasEnemyPiece(move)) {
+            possibleMoves.add(move);
+        }
+
+        return true;
+    }
 }
