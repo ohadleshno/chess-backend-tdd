@@ -30,11 +30,11 @@ public class PawnPiece extends Piece {
         Cord leftEnemy = new Cord(cord.getRow() + moveDir, cord.getCol() + RIGHT);
         Cord rightEnemy = new Cord(cord.getRow() + moveDir, cord.getCol() + LEFT);
 
-        if (doesCellHasEnemyPiece(leftEnemy)) {
+        if (!leftEnemy.isCordNotInRange() && doesCellHasEnemyPiece(leftEnemy)) {
             possibleMoves.add(leftEnemy);
         }
 
-        if (doesCellHasEnemyPiece(rightEnemy)) {
+        if (!rightEnemy.isCordNotInRange() && doesCellHasEnemyPiece(rightEnemy)){
             possibleMoves.add(rightEnemy);
         }
     }
@@ -43,7 +43,7 @@ public class PawnPiece extends Piece {
         Cord oneStepForward = new Cord(cord.getRow() + moveDir, cord.getCol());
         Cord twoStepForward = new Cord(cord.getRow() + (2 * moveDir), cord.getCol());
 
-        if (!isCellEmpty(oneStepForward)) {
+        if (!oneStepForward.isCordNotInRange() && !isCellEmpty(oneStepForward)) {
             return;
         }
 

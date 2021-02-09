@@ -20,7 +20,7 @@ public class PawnPossibleMovesIntegrationTests {
     private PossibleMovesTestService possibleMovesTestService;
 
     @BeforeEach
-    public void clean(){
+    public void clean() {
         possibleMovesTestService.resetBoard();
     }
 
@@ -64,8 +64,8 @@ public class PawnPossibleMovesIntegrationTests {
     public void GivenEnemySoliderInDiagonalCells__WhenRequestingPossibleMoves__ThenCanMoveThere() {
         int initialBlackPawnCordCol = INITIAL_BLACK_PAWN_CORD.getCol();
         int initialBlackPawnCordRow = INITIAL_BLACK_PAWN_CORD.getRow();
-        Cord enemyLocation = INITIAL_BLACK_PAWN_CORD.toBuilder().col(initialBlackPawnCordCol +1).row(initialBlackPawnCordRow +1).build();
-        Cord secondEnemyLocation = INITIAL_BLACK_PAWN_CORD.toBuilder().col(initialBlackPawnCordCol -1).row(initialBlackPawnCordRow +1).build();
+        Cord enemyLocation = INITIAL_BLACK_PAWN_CORD.toBuilder().col(initialBlackPawnCordCol + 1).row(initialBlackPawnCordRow + 1).build();
+        Cord secondEnemyLocation = INITIAL_BLACK_PAWN_CORD.toBuilder().col(initialBlackPawnCordCol - 1).row(initialBlackPawnCordRow + 1).build();
         possibleMovesTestService.putPieceOnCell(INITIAL_BLACK_PAWN_CORD, new Cell(PieceType.PAWN, CellContent.BLACK_PIECE));
         possibleMovesTestService.putPieceOnCell(enemyLocation, new Cell(PieceType.PAWN, CellContent.WHITE_PIECE));
         possibleMovesTestService.putPieceOnCell(secondEnemyLocation, new Cell(PieceType.PAWN, CellContent.WHITE_PIECE));
@@ -88,29 +88,29 @@ public class PawnPossibleMovesIntegrationTests {
 
     @Test
     public void GivenPawnNotOnInitialLocation__WhenRequestingPossibleMoves__ThenCantDoTwoStepForward() {
-        Cord location = INITIAL_BLACK_PAWN_CORD.toBuilder().row(INITIAL_BLACK_PAWN_CORD.getRow() +1).build();
+        Cord location = INITIAL_BLACK_PAWN_CORD.toBuilder().row(INITIAL_BLACK_PAWN_CORD.getRow() + 1).build();
         possibleMovesTestService.putPieceOnCell(location, new Cell(PieceType.PAWN, CellContent.BLACK_PIECE));
 
         PossibleMovesResponseContract PossibleMoves = possibleMovesTestService.getPossibleMoves(BLACK_TURN, INITIAL_BLACK_PAWN_CORD);
-        Cord twoStepForward = location.toBuilder().row(location.getRow() +2).build();
+        Cord twoStepForward = location.toBuilder().row(location.getRow() + 2).build();
 
         assertThat(PossibleMoves.getPossibleMoves()).doesNotContain(twoStepForward);
     }
 
     @Test
     public void GivenPawnWithFriendOneStepForward__WhenRequestingPossibleMoves__ThenCantDoTwoStepForward() {
-        Cord friendLocation = INITIAL_BLACK_PAWN_CORD.toBuilder().row(INITIAL_BLACK_PAWN_CORD.getRow()+1).build();
+        Cord friendLocation = INITIAL_BLACK_PAWN_CORD.toBuilder().row(INITIAL_BLACK_PAWN_CORD.getRow() + 1).build();
         possibleMovesTestService.putPieceOnCell(friendLocation, new Cell(PieceType.PAWN, CellContent.BLACK_PIECE));
 
         PossibleMovesResponseContract PossibleMoves = possibleMovesTestService.getPossibleMoves(BLACK_TURN, INITIAL_BLACK_PAWN_CORD);
-        Cord twoStepForward = INITIAL_BLACK_PAWN_CORD.toBuilder().row(INITIAL_BLACK_PAWN_CORD.getRow() +2).build();
+        Cord twoStepForward = INITIAL_BLACK_PAWN_CORD.toBuilder().row(INITIAL_BLACK_PAWN_CORD.getRow() + 2).build();
 
         assertThat(PossibleMoves.getPossibleMoves()).doesNotContain(twoStepForward);
     }
 
     @Test
     public void GivenPawnWithFriendOneStepForward__WhenRequestingPossibleMoves__ThenCantMoveThere() {
-        Cord friendLocation = INITIAL_BLACK_PAWN_CORD.toBuilder().row(INITIAL_BLACK_PAWN_CORD.getRow()+1).build();
+        Cord friendLocation = INITIAL_BLACK_PAWN_CORD.toBuilder().row(INITIAL_BLACK_PAWN_CORD.getRow() + 1).build();
         possibleMovesTestService.putPieceOnCell(friendLocation, new Cell(PieceType.PAWN, CellContent.BLACK_PIECE));
 
         PossibleMovesResponseContract PossibleMoves = possibleMovesTestService.getPossibleMoves(BLACK_TURN, INITIAL_BLACK_PAWN_CORD);
@@ -120,12 +120,20 @@ public class PawnPossibleMovesIntegrationTests {
 
     @Test
     public void GivenPawnWithFriendTwoStepForward__WhenRequestingPossibleMoves__ThenCantMoveThere() {
-        Cord friendLocation = INITIAL_BLACK_PAWN_CORD.toBuilder().row(INITIAL_BLACK_PAWN_CORD.getRow()+2).build();
+        Cord friendLocation = INITIAL_BLACK_PAWN_CORD.toBuilder().row(INITIAL_BLACK_PAWN_CORD.getRow() + 2).build();
         possibleMovesTestService.putPieceOnCell(friendLocation, new Cell(PieceType.PAWN, CellContent.BLACK_PIECE));
 
         PossibleMovesResponseContract PossibleMoves = possibleMovesTestService.getPossibleMoves(BLACK_TURN, INITIAL_BLACK_PAWN_CORD);
 
         assertThat(PossibleMoves.getPossibleMoves()).doesNotContain(friendLocation);
+    }
+
+    @Test
+    public void GivenPawnOnEdge__WhenRequestingPossibleMoves__ThenSucceed() {
+        Cord cord = new Cord(6, 7);
+        PossibleMovesResponseContract PossibleMoves = possibleMovesTestService.getPossibleMoves(WHITE_TURN, cord);
+
+        assertThat(PossibleMoves.getPossibleMoves()).isNotNull();
     }
 
 }

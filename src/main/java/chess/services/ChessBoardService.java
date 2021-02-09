@@ -9,6 +9,7 @@ import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.List;
 
 @Component
@@ -23,10 +24,20 @@ public class ChessBoardService {
 
     public void move(Cord from, Cord to) {
         board.movePiece(from, to);
+        isWhiteTurn = !isWhiteTurn;
     }
 
     public List<Cord> getPossibleMoves(Cord cord) throws NoPieceException {
+        //todo add test
+        if (cord.isCordNotInRange() || board.getCell(cord).getCellContent() == CellContent.NONE) {
+            return Collections.emptyList();
+        }
         return getPiece(cord).getPossibleMoves();
+    }
+
+    public void resetBoard() {
+        isWhiteTurn = true;
+        board = new Board();
     }
 
     @NotNull
@@ -34,17 +45,17 @@ public class ChessBoardService {
         PieceType pieceType = this.board.getCell(cord).getPieceType();
         switch (pieceType) {
             case KING:
-                return  new KingPiece(isWhiteTurn, cord, board);
+                return new KingPiece(isWhiteTurn, cord, board);
             case PAWN:
-                return  new PawnPiece(isWhiteTurn, cord, board);
+                return new PawnPiece(isWhiteTurn, cord, board);
             case ROK:
-                return  new RokPiece(isWhiteTurn, cord, board);
+                return new RokPiece(isWhiteTurn, cord, board);
             case KNIGHT:
                 return new KnightPiece(isWhiteTurn, cord, board);
             case BISHOP:
-                return new BishopPiece(isWhiteTurn,cord,board);
+                return new BishopPiece(isWhiteTurn, cord, board);
             case QUEEN:
-                return new QueenPiece(isWhiteTurn,cord,board);
+                return new QueenPiece(isWhiteTurn, cord, board);
             default:
                 throw new NoPieceException("No piece on cord");
         }
