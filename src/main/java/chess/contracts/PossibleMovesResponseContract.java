@@ -2,16 +2,23 @@ package chess.contracts;
 
 
 import chess.modals.Cord;
-import lombok.*;
 
 import java.util.List;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@EqualsAndHashCode
-@NoArgsConstructor
+
 public class PossibleMovesResponseContract {
 
     private List<Cord> possibleMoves;
+
+
+    public PossibleMovesResponseContract() {
+    }
+
+    public List<Cord> getPossibleMoves() {
+        return possibleMoves;
+    }
+
+    public void setPossibleMoves(List<Cord> possibleMoves) {
+        this.possibleMoves = possibleMoves;
+    }
 }
